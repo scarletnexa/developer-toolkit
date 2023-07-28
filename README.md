@@ -22,7 +22,7 @@ Check our [examples file](./tests/index.js) for examples on how to use the funct
 
 `fTime(date: Date, seconds?: boolean): string` - Format a time to the format: Hours:Minutes[:Seconds].
 
-`dateAmmount(date: Date): string` - Calculate the time difference between a given date and today and return a user-friendly string
+`dateAmount(date: Date): string` - Calculate the time difference between a given date and today and return a user-friendly string
 
 ### Numbers
 
