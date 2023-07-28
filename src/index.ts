@@ -45,7 +45,7 @@ export function fTime(date: Date, seconds: boolean = false): string {
  * @param {Date} date - The date to compare with today.
  * @returns {string} A string representing the time difference, e.g., "Today", "Yesterday", or "{X} days ago".
  */
-export function dateAmmount(date: Date): string {
+export function dateAmount(date: Date): string {
     const oneDayMs = 24 * 60 * 60 * 1000;
     const today = new Date();
     const diffDays = Math.round(Math.abs((today.getTime() - date.getTime()) / oneDayMs));
