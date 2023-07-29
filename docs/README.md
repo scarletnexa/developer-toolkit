@@ -36,7 +36,7 @@ ___
 
 *   **Check the [FAQs](#faqs) for a list of common questions and problems.**
 
-*   **Search for [Similar Issues](https://github.com/akenolol/javascript-fundamentals/issues)**
+*   **Search for [Similar Issues](https://github.com/LabsStar/developer-toolkit/issues)**
 
 ____
 
