@@ -1,3 +1,5 @@
+const fetch = require('node-fetch');
+
 
 /**
  * Format a date to the format: Month Day Year.
@@ -404,4 +406,130 @@ export function toCamelCase(str: string): string {
     return str.replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) => {
         return index === 0 ? word.toLowerCase() : word.toUpperCase();
     }).replace(/\s+/g, '');
+}
+
+
+/**
+ * Parses query string parameters into an object.
+ * @param {string} queryString - The query string to be parsed.
+ * @returns {object} The parsed query string parameters.
+ * @example
+ * parseQueryString('?page=1&size=10'); // Returns: { page: '1', size: '10' }
+ */
+
+export function parseQueryString(queryString: string): object {
+    const params = new URLSearchParams(queryString);
+    return Array.from(params.keys()).reduce((acc, key) => {
+        acc[key] = params.get(key);
+        return acc;
+    }, {});
+}
+
+/**
+ * Flatten an array.
+ * @param {Array} array - The array to be flattened.
+ * @returns {Array} The flattened array.
+ * @example
+ * flattenArray([1, [2], 3, 4]); // Returns: [1, 2, 3, 4]
+ */
+export function flattenArray(array: any[]): any[] {
+    return array.reduce((acc, val) => acc.concat(val), []);
+}
+
+/**
+ * Calculate the average of an array of numbers.
+ * @param {Array} array - The array of numbers.
+ * @returns {number} The average of the numbers.
+ * @example
+ * arrayAverage([1, 2, 3, 4]); // Returns: 2.5
+ */
+export function arrayAverage(array: number[]): number {
+    return array.reduce((acc, val) => acc + val, 0) / array.length;
+}
+
+/**
+ * Calculate the sum of an array of numbers.
+ * @param {Array} array - The array of numbers.
+ * @returns {number} The sum of the numbers.
+ * @example
+ * arraySum([1, 2, 3, 4]); // Returns: 10
+ */
+export function arraySum(array: number[]): number {
+    return array.reduce((acc, val) => acc + val, 0);
+}
+
+/**
+ * Calculate the Levenshtein distance between two strings.
+ * @param {string} str1 - The first string.
+ * @param {string} str2 - The second string.
+ * @returns {number} The Levenshtein distance between the two strings.
+ * @example
+ * levenshteinDistance("kitten", "sitting"); // Returns: 3
+ */
+
+export function levenshteinDistance(str1: string, str2: string): number {
+    const track = Array(str2.length + 1).fill(null).map(() =>
+        Array(str1.length + 1).fill(null));
+    for (let i = 0; i <= str1.length; i += 1) {
+        track[0][i] = i;
+    }
+    for (let j = 0; j <= str2.length; j += 1) {
+        track[j][0] = j;
+    }
+    for (let j = 1; j <= str2.length; j += 1) {
+        for (let i = 1; i <= str1.length; i += 1) {
+            const indicator = str1[i - 1] === str2[j - 1] ? 0 : 1;
+            track[j][i] = Math.min(
+                track[j][i - 1] + 1,
+                track[j - 1][i] + 1,
+                track[j - 1][i - 1] + indicator,
+            );
+        }
+    }
+    return track[str2.length][str1.length];
+}
+
+/**
+ * Validate an object against a schema.
+ * @param {object} obj - The object to be validated.
+ * @param {object} schema - The schema object.
+ * @returns {object} The validation result.
+ * @example
+ * validateAgainstSchema({ name: 'John', age: 30 }, { name: 'string', age: 'number' }); // Returns: { isValid: true, invalidProperties: [] }
+*/
+
+export function validateAgainstSchema(obj: object, schema: object): object {
+    const objKeys = Object.keys(obj);
+    const schemaKeys = Object.keys(schema);
+
+    const invalidProperties = objKeys.reduce((acc, key) => {
+        if (schemaKeys.includes(key)) {
+            const type = schema[key];
+            const value = obj[key];
+            if (typeof value !== type) {
+                acc.push(key);
+            }
+        }
+        return acc;
+    }, []);
+
+    return {
+        isValid: invalidProperties.length === 0,
+        invalidProperties,
+    };
+}
+/**
+ * Convert a hex color to RGB.
+ * @param {string} hex - The hex color.
+ * @returns {string} The RGB color.
+ * @example
+ * hexToRGB('#ffffff'); // Returns: "rgb(255, 255, 255)"
+ */
+
+export function hexToRGB(hex: string): string {
+    const hexValue = hex.replace('#', '');
+    const r = parseInt(hexValue.substring(0, 2), 16);
+    const g = parseInt(hexValue.substring(2, 4), 16);
+    const b = parseInt(hexValue.substring(4, 6), 16);
+    return `rgb(${r}, ${g}, ${b})`;
 }

@@ -1,11 +1,12 @@
 {
     "name": "developer-toolkit-utils",
-    "version": "1.0.3",
+    "version": "1.0.6",
     "description": "A collection of utility functions and tools for developers to streamline their projects.",
     "main": "dist/src/index.ts",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "build": "tsc"
+        "build": "tsc",
+        "publish::main": "npm run build && npm publish && git add . && git commit -m \"Publishing new version\" && git push"
     },
     "repository": {
         "type": "git",
@@ -28,5 +29,8 @@
     "devDependencies": {
         "ts-node": "^10.9.1",
         "typescript": "^5.1.6"
+    },
+    "dependencies": {
+        "node-fetch": "^2.6.11"
     }
 }
