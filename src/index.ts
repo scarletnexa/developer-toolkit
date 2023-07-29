@@ -196,7 +196,7 @@ export function isStrongPassword(password: string, minLength: number = 8): { val
         { condition: hasUppercase, message: "Include at least one uppercase letter (A-Z)." },
         { condition: hasLowercase, message: "Include at least one lowercase letter (a-z)." },
         { condition: hasDigit, message: "Include at least one digit (0-9)." },
-        { condition: hasSpecialChar, message: "Include at least one special character (e.g., !@#$%)."}
+        { condition: hasSpecialChar, message: "Include at least one special character (e.g., !@#$%)." }
     ];
 
     const suggestions = criteria.filter(criterion => !criterion.condition).map(criterion => criterion.message);
@@ -233,13 +233,175 @@ export function isStrongPassword(password: string, minLength: number = 8): { val
 export function removeDuplicates(array: any[]): any[] {
     const t = [...array];
 
-    for (let i = 0; i < t.length; i++) {
-        for (let j = i + 1; j < t.length; j++) {
-            if (t[i] === t[j]) {
-                t.splice(j--, 1);
-            }
+    return t.filter((item, index) => t.indexOf(item) === index);
+}
+
+/**
+ * Convert an object to a query string.
+ * @param {object} obj - The object to be converted.
+ * @returns {string} The query string.
+ * @example
+ * objectToQueryString({ foo: 'bar', baz: 42 }); // Returns: "?foo=bar&baz=42"
+ */
+
+export function objectToQueryString(obj: object, urlSafe?: boolean): string {
+    return '?' + Object.keys(obj).map(key => `${key}=${urlSafe ? encodeURIComponent(obj[key]) : obj[key]}`).join('&');
+}
+
+/**
+ * Truncate a string to a given length.
+ * @param {string} str - The string to be truncated.
+ * @param {number} maxLength - The maximum length of the string.
+ * @returns {string} The truncated string.
+ * @example
+ * truncateString('Lorem ipsum dolor sit amet', 10); // Returns: "Lorem ipsu..."
+ */
+export function truncateString(str: string, maxLength: number): string {
+    if (str.length > maxLength) {
+        return str.substring(0, maxLength - 3) + '...';
+    }
+    return str;
+}
+
+
+
+/**
+ * Divide an array into chunks of a given size.
+ * @param {Array} array - The array to be chunked.
+ * @param {number} chunkSize - The size of each chunk.
+ * @returns {Array} The chunked array.
+ * @example
+ * chunkArray([1, 2, 3, 4, 5, 6, 7], 3); // Returns: [[1, 2, 3], [4, 5, 6], [7]]
+ */
+export function chunkArray(array: any[], chunkSize: number): any[] {
+    const result = [];
+    for (let i = 0; i < array.length; i += chunkSize) {
+        result.push(array.slice(i, i + chunkSize));
+    }
+    return result;
+}
+
+/**
+ * Sort an array of objects by a given property.
+ * @param {Array} array - The array to be sorted.
+ * @param {string} property - The property to sort by.
+ * @returns {Array} The sorted array.
+ * @example
+ * const users = [
+ *    { name: 'John', age: 25 },    
+ *   { name: 'Jane', age: 22 },
+ *   { name: 'Jack', age: 27 }
+ * ];
+ * 
+ * sortByProperty(users, 'age'); // Returns: [{ name: 'Jane', age: 22 }, { name: 'John', age: 25 }, { name: 'Jack', age: 27 }]
+ */
+export function sortByProperty(array: any[], property: string): any[] {
+    return array.sort((a, b) => {
+        if (a[property] < b[property]) {
+            return -1;
         }
+        if (a[property] > b[property]) {
+            return 1;
+        }
+        return 0;
+    });
+}
+
+/**
+ * Validate a URL.
+ * @param {string} url - The URL to be validated.
+ * @returns {boolean} Returns true if the URL is valid, otherwise false.
+ * @example
+ * isValidURL("https://www.example.com"); // Returns: true
+ * isValidURL("example.com"); // Returns: false
+ */
+
+export function isVaildUrl(url: string): boolean {
+    const regex = /^(ftp|http|https):\/\/[^ "]+$/;
+    return regex.test(url);
+}
+
+/**
+ * Find the common elements between two arrays.
+ * @param {Array} array1 - The first array.
+ * @param {Array} array2 - The second array.
+ * @returns {Array} The common elements between the two arrays.
+ * @example
+ * arrayIntersection([1, 2, 3], [2, 3, 4]); // Returns: [2, 3]
+ */
+
+export function arrayIntersection(array1: any[], array2: any[]): any[] {
+    return array1.filter(x => array2.includes(x));
+}
+
+
+/**
+ * Deep merge two objects.
+ * @param {object} target - The target object.
+ * @param {object} source - The source object.
+ * @returns {object} The merged object.
+ * @example
+ * deepMerge({ a: { b: 1 } }, { a: { c: 2 } }); // Returns: { a: { b: 1, c: 2 } }
+ */
+export function deepMerge(target: object, source: object): object {
+    const isObject = (obj: object) => obj && typeof obj === 'object';
+
+    if (!isObject(target) || !isObject(source)) {
+        return source;
     }
 
-    return t;
+    Object.keys(source).forEach(key => {
+        const targetValue = target[key];
+        const sourceValue = source[key];
+
+        if (Array.isArray(targetValue) && Array.isArray(sourceValue)) {
+            target[key] = targetValue.concat(sourceValue);
+        } else if (isObject(targetValue) && isObject(sourceValue)) {
+            target[key] = deepMerge(Object.assign({}, targetValue), sourceValue);
+        } else {
+            target[key] = sourceValue;
+        }
+    });
+
+    return target;
+}
+
+
+/**
+ *  Check if a string is a palindrome.
+ * @param {string} str
+ * @returns {boolean} Returns true if the string is a palindrome, otherwise false.
+ * @example
+ * palindromeChecker('racecar'); // Returns: true
+ * palindromeChecker('hello'); // Returns: false
+ */
+export function palindromeChecker(str: string): boolean {
+    const reversedStr = str.toLowerCase().split('').reverse().join('');
+    return str === reversedStr;
+}
+
+// String Capitalization
+
+/**
+ * Capitalize the first letter of a string.
+ * @param {string} str - The string to be capitalized.
+ * @returns {string} The capitalized string.
+ * @example
+ * capitalize('hello world'); // Returns: "Hello world"
+ */
+export function capitalize(str: string): string {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+/**
+ * Convert a string to camel case.
+ * @param {string} str - The string to be converted.
+ * @returns {string} The camel cased string.
+ * @example
+ * toCamelCase('Hello world'); // Returns: "helloWorld"
+ */
+export function toCamelCase(str: string): string {
+    return str.replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) => {
+        return index === 0 ? word.toLowerCase() : word.toUpperCase();
+    }).replace(/\s+/g, '');
 }

@@ -1,6 +1,6 @@
 {
     "name": "developer-toolkit-utils",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "A collection of utility functions and tools for developers to streamline their projects.",
     "main": "dist/src/index.ts",
     "scripts": {
