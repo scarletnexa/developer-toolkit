@@ -1,6 +1,3 @@
-const fetch = require('node-fetch');
-
-
 /**
  * Format a date to the format: Month Day Year.
  *
